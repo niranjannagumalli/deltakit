@@ -3,7 +3,6 @@
 """
 
 from __future__ import annotations
-import warnings
 
 from collections.abc import Collection, Iterable, Sequence
 from itertools import chain
@@ -11,7 +10,6 @@ from itertools import chain
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
-import seaborn as sns
 from matplotlib.ticker import FuncFormatter
 
 from deltakit_explorer.types._types import QubitCoordinateToDetectorMapping
@@ -25,10 +23,10 @@ def correlation_matrix(
     """Plot a given correlation matrix as a heatmap.
 
     Args:
-        matrix (npt.NDArray): 
+        matrix (npt.NDArray):
             correlation matrix.
 
-            For backward compatibility, a `List[List[float]]` is also accepted, but this usage is deprecated and will be removed in a future release. 
+            For backward compatibility, a `List[List[float]]` is also accepted, but this usage is deprecated and will be removed in a future release.
         qubit_to_detector_mapping (QubitCoordinateToDetectorMapping):
             {qubit_coordinate_tuple_1: [det_1, det_2, det_2, ...], }
 
@@ -38,6 +36,10 @@ def correlation_matrix(
     Returns:
         matplotlib.plt:
             The plt object containing the drawn heatmap.
+    Raises:
+        ImportError:
+            If seaborn is not installed - please install Visualisation extras.
+
 
     Examples:
 
@@ -60,13 +62,13 @@ def correlation_matrix(
         import seaborn as sns  # noqa: PLC0415
     except ImportError as ie:
         msg = "Seaborn is not installed - please install Visualisation extras"
-        raise ImportError(msg) from ie    
+        raise ImportError(msg) from ie
     if not isinstance(qubit_to_detector_mapping, QubitCoordinateToDetectorMapping):
         qubit_to_detector_mapping = QubitCoordinateToDetectorMapping(qubit_to_detector_mapping)
     #check if matrix is a list of lists, if so convert to numpy array
     if isinstance(matrix, list):
         matrix = np.array(matrix)
-    
+
     minor_ticks_in_major = len(
         next(iter(qubit_to_detector_mapping.detector_map.values())))
     num_major_ticks = len(qubit_to_detector_mapping.detector_map.keys())

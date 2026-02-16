@@ -4,12 +4,12 @@ from __future__ import annotations
 from pathlib import Path
 from typing import ClassVar
 from unittest import mock
-import pytest 
 
 import matplotlib as mpl
 import matplotlib.image as img
 import matplotlib.pyplot as plt
 import numpy as np
+import pytest
 
 from deltakit_explorer import plotting
 from deltakit_explorer.types import QubitCoordinateToDetectorMapping
@@ -119,4 +119,3 @@ class TestVisualisation:
              pytest.raises(ImportError, match=r"Seaborn is not installed - please install Visualisation extras")
         ):
             plotting.correlation_matrix(np.array([]), QubitCoordinateToDetectorMapping(self.detector_map))
-

@@ -1,6 +1,7 @@
 # (c) Copyright Riverlane 2020-2025.
-from collections.abc import Sequence
 import warnings
+from collections.abc import Sequence
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import FuncFormatter
@@ -40,13 +41,13 @@ def plot_correlation_matrix(
     except ImportError as ie:
         msg = "Seaborn is not installed - please install Visualisation extras"
         raise ImportError(msg) from ie
-    
+
     warnings.warn(
         "plot_correlation_matrix is deprecated and will be removed in a future release. Please use 'deltakit_explorer.visualisation._visualisation.correlation_matrix' instead.",
         DeprecationWarning,
         stacklevel=2
     )
-    
+
 
     # create a list of indices of the minor ticks for which to label with
     # the qubit labels such that the labels are in the middle of the major

@@ -38,7 +38,7 @@ class TestPijVisualiser:
         filepath = tmp_path / "testfig.png"
         with pytest.warns(DeprecationWarning, match="plot_correlation_matrix is deprecated and will be removed in a future release. Please use 'deltakit_explorer.visualisation._visualisation.correlation_matrix' instead."):
             plt = plot_correlation_matrix(matrix, major_minor_mapping)
-        
+
         plt.savefig(filepath)
         plt.clf()
         assert filepath.is_file()
