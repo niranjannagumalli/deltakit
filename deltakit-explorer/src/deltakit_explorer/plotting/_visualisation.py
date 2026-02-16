@@ -3,6 +3,7 @@
 """
 
 from __future__ import annotations
+import warnings
 
 from collections.abc import Collection, Iterable, Sequence
 from itertools import chain
@@ -17,16 +18,21 @@ from deltakit_explorer.types._types import QubitCoordinateToDetectorMapping
 
 
 def correlation_matrix(
-    matrix: npt.NDArray,
-    qubit_to_detector_mapping: QubitCoordinateToDetectorMapping,
+    matrix: npt.NDArray | list[list[float]],
+    qubit_to_detector_mapping: QubitCoordinateToDetectorMapping | dict[tuple[float, ...], list[int]],
     labels: Sequence[str] = (),
 ):
     """Plot a given correlation matrix as a heatmap.
 
     Args:
-        matrix (npt.NDArray): correlation matrix.
+        matrix (npt.NDArray): 
+            correlation matrix.
+
+            For backward compatibility, a `List[List[float]]` is also accepted, but this usage is deprecated and will be removed in a future release. 
         qubit_to_detector_mapping (QubitCoordinateToDetectorMapping):
             {qubit_coordinate_tuple_1: [det_1, det_2, det_2, ...], }
+
+            For backward compatibility, a `Dict[Tuple[int, ...], List[int]]` the same format is also accepted, but this usage is deprecated and will be removed in a future release.
         labels (Sequence[str]): labels to the qubits.
 
     Returns:
@@ -48,6 +54,19 @@ def correlation_matrix(
     # create a list of indices of the minor ticks for which to label with
     # the qubit labels such that the labels are in the middle of the major
     # ticks. Sort the labels as they are not guaranteed to be in order.
+
+
+    try:
+        import seaborn as sns  # noqa: PLC0415
+    except ImportError as ie:
+        msg = "Seaborn is not installed - please install Visualisation extras"
+        raise ImportError(msg) from ie    
+    if not isinstance(qubit_to_detector_mapping, QubitCoordinateToDetectorMapping):
+        qubit_to_detector_mapping = QubitCoordinateToDetectorMapping(qubit_to_detector_mapping)
+    #check if matrix is a list of lists, if so convert to numpy array
+    if isinstance(matrix, list):
+        matrix = np.array(matrix)
+    
     minor_ticks_in_major = len(
         next(iter(qubit_to_detector_mapping.detector_map.values())))
     num_major_ticks = len(qubit_to_detector_mapping.detector_map.keys())

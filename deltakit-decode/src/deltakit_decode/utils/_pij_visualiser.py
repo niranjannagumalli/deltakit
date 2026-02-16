@@ -1,6 +1,6 @@
 # (c) Copyright Riverlane 2020-2025.
 from collections.abc import Sequence
-
+import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import FuncFormatter
@@ -12,6 +12,11 @@ def plot_correlation_matrix(
     labels: Sequence[str] = (),
 ):
     """Plot a given correlation matrix as a heatmap.
+
+    .. deprecated:: 0.7.1
+        This function is deprecated and will be removed in a future release.
+        Use `deltakit_explorer.visualisation._visualisation.correlation_matrix`
+        instead.
 
     Parameters
     ----------
@@ -29,11 +34,19 @@ def plot_correlation_matrix(
     matplotlib.plt
         The plt object containing the drawn heatmap.
     """
+
     try:
         import seaborn as sns  # noqa: PLC0415
     except ImportError as ie:
         msg = "Seaborn is not installed - please install Visualisation extras"
         raise ImportError(msg) from ie
+    
+    warnings.warn(
+        "plot_correlation_matrix is deprecated and will be removed in a future release. Please use 'deltakit_explorer.visualisation._visualisation.correlation_matrix' instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
+    
 
     # create a list of indices of the minor ticks for which to label with
     # the qubit labels such that the labels are in the middle of the major

@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import ClassVar
+from unittest import mock
+import pytest 
 
 import matplotlib as mpl
 import matplotlib.image as img
@@ -110,3 +112,11 @@ class TestVisualisation:
         plt.savefig(path)
         plt.clf()
         self.assert_same_size(path, path_ref)
+
+    def test_correlation_matrix_raises_exception_if_seaborn_not_installed(self):
+        with (
+             mock.patch("builtins.__import__", side_effect=ImportError),
+             pytest.raises(ImportError, match=r"Seaborn is not installed - please install Visualisation extras")
+        ):
+            plotting.correlation_matrix(np.array([]), QubitCoordinateToDetectorMapping(self.detector_map))
+

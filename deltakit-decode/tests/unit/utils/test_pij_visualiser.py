@@ -36,7 +36,9 @@ class TestPijVisualiser:
                                "default TKinter backend needs a display")
     def test_plot_correlation_matrix_creates_figure(self, tmp_path, matrix, major_minor_mapping):
         filepath = tmp_path / "testfig.png"
-        plt = plot_correlation_matrix(matrix, major_minor_mapping)
+        with pytest.warns(DeprecationWarning, match="plot_correlation_matrix is deprecated and will be removed in a future release. Please use 'deltakit_explorer.visualisation._visualisation.correlation_matrix' instead."):
+            plt = plot_correlation_matrix(matrix, major_minor_mapping)
+        
         plt.savefig(filepath)
         plt.clf()
         assert filepath.is_file()
