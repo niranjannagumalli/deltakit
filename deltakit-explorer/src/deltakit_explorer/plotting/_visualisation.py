@@ -63,6 +63,7 @@ def correlation_matrix(
     except ImportError as ie:
         msg = "Seaborn is not installed - please install Visualisation extras"
         raise ImportError(msg) from ie
+
     if not isinstance(qubit_to_detector_mapping, QubitCoordinateToDetectorMapping):
         qubit_to_detector_mapping = QubitCoordinateToDetectorMapping(qubit_to_detector_mapping)
     #check if matrix is a list of lists, if so convert to numpy array

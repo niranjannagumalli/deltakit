@@ -1,12 +1,13 @@
 # (c) Copyright Riverlane 2020-2025.
 import platform
+import sys
 from unittest import mock
 
 import pytest
 
 from deltakit_decode.utils._pij_visualiser import plot_correlation_matrix
 
-
+msg = "plot_correlation_matrix is deprecated and will be removed in version 0.9.0. Reason for deprecation: 'A better function is now available.'. Consider using 'deltakit_explorer.visualisation._visualisation.correlation_matrix' instead."
 class TestPijVisualiser:
     @pytest.mark.parametrize(
         ("matrix", "major_minor_mapping"),
@@ -36,7 +37,7 @@ class TestPijVisualiser:
                                "default TKinter backend needs a display")
     def test_plot_correlation_matrix_creates_figure(self, tmp_path, matrix, major_minor_mapping):
         filepath = tmp_path / "testfig.png"
-        with pytest.warns(DeprecationWarning, match="plot_correlation_matrix is deprecated and will be removed in a future release. Please use 'deltakit_explorer.visualisation._visualisation.correlation_matrix' instead."):
+        with pytest.warns(DeprecationWarning, match=msg):
             plt = plot_correlation_matrix(matrix, major_minor_mapping)
 
         plt.savefig(filepath)
@@ -45,7 +46,8 @@ class TestPijVisualiser:
 
     def test_plot_correlation_matrix_raises_exception_if_seaborn_not_installed(self):
         with (
-             mock.patch("builtins.__import__", side_effect=ImportError),
-             pytest.raises(ImportError, match=r"Seaborn is not installed - please install Visualisation extras")
+            mock.patch.dict(sys.modules, {"seaborn": None}),
+            pytest.warns(DeprecationWarning, match=msg),
+            pytest.raises(ImportError, match=r"Seaborn is not installed - please install Visualisation extras"),
         ):
             plot_correlation_matrix([], {})

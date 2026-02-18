@@ -1,6 +1,7 @@
 # (c) Copyright Riverlane 2020-2025.
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 from typing import ClassVar
 from unittest import mock
@@ -115,7 +116,7 @@ class TestVisualisation:
 
     def test_correlation_matrix_raises_exception_if_seaborn_not_installed(self):
         with (
-             mock.patch("builtins.__import__", side_effect=ImportError),
+             mock.patch.dict(sys.modules, {"seaborn": None}),
              pytest.raises(ImportError, match=r"Seaborn is not installed - please install Visualisation extras")
         ):
             plotting.correlation_matrix(np.array([]), QubitCoordinateToDetectorMapping(self.detector_map))
