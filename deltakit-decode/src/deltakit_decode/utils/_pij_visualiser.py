@@ -10,7 +10,7 @@ from packaging.version import Version
 
 @deprecated(
     reason="A better function is now available.",
-    replaced_by="deltakit_explorer.visualisation._visualisation.correlation_matrix",
+    replaced_by="deltakit_explorer.plotting.correlation_matrix",
     removed_in_version=Version("0.9.0"),
 )
 def plot_correlation_matrix(
@@ -22,7 +22,7 @@ def plot_correlation_matrix(
 
     .. deprecated:: 0.9.0
         This function is deprecated and will be removed in a future release.
-        Use `deltakit_explorer.visualisation._visualisation.correlation_matrix`
+        Use `deltakit_explorer.plotting.correlation_matrix`
         instead.
 
     Parameters
@@ -47,9 +47,6 @@ def plot_correlation_matrix(
     except ImportError as ie:
         msg = "Seaborn is not installed - please install Visualisation extras"
         raise ImportError(msg) from ie
-
-
-
 
     # create a list of indices of the minor ticks for which to label with
     # the qubit labels such that the labels are in the middle of the major

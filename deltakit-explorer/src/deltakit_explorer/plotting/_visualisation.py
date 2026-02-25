@@ -16,22 +16,17 @@ from deltakit_explorer.types._types import QubitCoordinateToDetectorMapping
 
 
 def correlation_matrix(
-    matrix: npt.NDArray | list[list[float]],
+    matrix: npt.NDArray[np.floating] | Sequence[Sequence[float]],
     qubit_to_detector_mapping: QubitCoordinateToDetectorMapping | dict[tuple[float, ...], list[int]],
     labels: Sequence[str] = (),
 ):
     """Plot a given correlation matrix as a heatmap.
 
     Args:
-        matrix (npt.NDArray):
-            correlation matrix.
+        matrix: correlation matrix to plot.
+        qubit_to_detector_mapping: Mapping of detectors to qubit coordinates.
+        labels: labels to the qubits.
 
-            For backward compatibility, a `List[List[float]]` is also accepted, but this usage is deprecated and will be removed in a future release.
-        qubit_to_detector_mapping (QubitCoordinateToDetectorMapping):
-            {qubit_coordinate_tuple_1: [det_1, det_2, det_2, ...], }
-
-            For backward compatibility, a `Dict[Tuple[int, ...], List[int]]` the same format is also accepted, but this usage is deprecated and will be removed in a future release.
-        labels (Sequence[str]): labels to the qubits.
 
     Returns:
         matplotlib.plt:
@@ -57,29 +52,28 @@ def correlation_matrix(
     # the qubit labels such that the labels are in the middle of the major
     # ticks. Sort the labels as they are not guaranteed to be in order.
 
-
     try:
         import seaborn as sns  # noqa: PLC0415
     except ImportError as ie:
         msg = "Seaborn is not installed - please install Visualisation extras"
         raise ImportError(msg) from ie
 
-    if not isinstance(qubit_to_detector_mapping, QubitCoordinateToDetectorMapping):
-        qubit_to_detector_mapping = QubitCoordinateToDetectorMapping(qubit_to_detector_mapping)
-    #check if matrix is a list of lists, if so convert to numpy array
-    if isinstance(matrix, list):
-        matrix = np.array(matrix)
+    #Harmonise the inputs
+    if isinstance(qubit_to_detector_mapping, QubitCoordinateToDetectorMapping):
+        qubit_to_detector_mapping = qubit_to_detector_mapping.detector_map
+
+    matrix = np.asarray(matrix)
 
     minor_ticks_in_major = len(
-        next(iter(qubit_to_detector_mapping.detector_map.values())))
-    num_major_ticks = len(qubit_to_detector_mapping.detector_map.keys())
+        next(iter(qubit_to_detector_mapping.values())))
+    num_major_ticks = len(qubit_to_detector_mapping.keys())
     num_ticks = minor_ticks_in_major * num_major_ticks
     num_minor_ticks = num_ticks - num_major_ticks
     ticks_per_major = num_minor_ticks // num_major_ticks
     mid_im = ticks_per_major // 2
     label_indices = [mid_im + (ticks_per_major * i) for i in range(num_major_ticks)]
     sorted_labels = (
-        sorted(qubit_to_detector_mapping.detector_map.keys())
+        sorted(qubit_to_detector_mapping.keys())
         if len(labels) == 0 else labels
     )
 
