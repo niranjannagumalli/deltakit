@@ -27,7 +27,6 @@ def correlation_matrix(
         qubit_to_detector_mapping: Mapping of detectors to qubit coordinates.
         labels: labels to the qubits.
 
-
     Returns:
         matplotlib.plt:
             The plt object containing the drawn heatmap.
@@ -131,8 +130,8 @@ def defect_diagram(all_detector_coords: dict, all_defect_rates: dict):
     their error rates.
 
     Args:
-        all_detector_coords (Dict): Mapping from coordinates to detector numbers.
-        all_defect_rates (Dict): Defect rates of detectors.
+        all_detector_coords: Mapping from coordinates to detector numbers.
+        all_defect_rates: Defect rates of detectors.
 
     Returns:
         matplotlib.pyplot: matplotlib module
@@ -239,11 +238,11 @@ def defect_rates(
     in Google paper https://www.nature.com/articles/s41586-022-05434-1.
 
     Args:
-        defect_rates_series (Iterable[Dict[Tuple[float, ...], List[float]]]):
+        defect_rates_series:
             List of defect rates dictionaries.
             E.g, this can be for the X and Z experiments
             for the Google data set.
-        w2_det_coords (Container[Tuple[float, ...]]):
+        w2_det_coords:
             Coordinates for the weight 2 detectors, so
             that these may be plotted with a separate colour
             and have their average separate from the higher-weight
