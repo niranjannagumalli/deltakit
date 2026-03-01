@@ -8,9 +8,9 @@ import pytest
 from deltakit_decode.utils._pij_visualiser import plot_correlation_matrix
 
 msg = (
-"plot_correlation_matrix is deprecated and will be removed in version 0.9.0."
-" Reason for deprecation: 'A better function is now available.'"
-". Consider using 'deltakit_explorer.plotting.correlation_matrix' instead."
+"plot_correlation_matrix is deprecated and will be removed in version 0.9.0. "
+"Reason for deprecation: 'A better function is now available.'. "
+"Consider using 'deltakit_explorer.plotting.correlation_matrix' instead."
 )
 class TestPijVisualiser:
     @pytest.mark.parametrize(
